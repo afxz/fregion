@@ -93,8 +93,10 @@ for fname, data in [
     ("data/districts.json", districts_out),
     ("data/streets.json", streets_out),
 ]:
+    lines = [json.dumps(item, ensure_ascii=False) for item in data]
+    out = "[\n  " + ",\n  ".join(lines) + "\n]\n"
     with open(fname, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+        f.write(out)
     print(f"✓ {fname}: {len(data)} 条")
 
 total = f"国家 {len(countries)}, 省份 {len(provinces_out)}, 城市 {len(cities_out)}, 区县 {len(districts_out)}, 街道 {len(streets_out)}"
