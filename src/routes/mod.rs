@@ -33,5 +33,7 @@ pub fn create_router() -> Router {
 
 /// `/api/v1` 子路由
 fn api_routes() -> Router {
-    Router::new().route("/ping", get(handlers::ping))
+    Router::new()
+        .route("/ping", get(handlers::ping))
+        .route("/ip", get(handlers::client_ip))
 }
