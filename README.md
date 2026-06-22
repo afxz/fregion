@@ -6,7 +6,7 @@
 | 省份 | 34 | `data/provinces.json` |
 | 城市 | 342 | `data/cities.json` |
 | 区县 | **2,978** | `data/districts.json` |
-| 街道/乡镇 | **41,352** | `data/streets.json
+| 街道/乡镇 | **41,352** | `data/streets.json` |
 
 ---
 ```
