@@ -1,3 +1,5 @@
+pub mod region;
+
 use serde::Serialize;
 
 /// Ping 接口响应

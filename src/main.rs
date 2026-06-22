@@ -6,6 +6,8 @@ use std::net::SocketAddr;
 
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
+use crate::handlers::region::AppState;
+
 #[tokio::main]
 async fn main() {
     // 初始化日志
@@ -17,8 +19,11 @@ async fn main() {
         .with(tracing_subscriber::fmt::layer())
         .init();
 
+    // 应用状态
+    let state = AppState::new();
+
     // 构建路由
-    let app = routes::create_router();
+    let app = routes::create_router(state);
 
     // 启动服务
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));

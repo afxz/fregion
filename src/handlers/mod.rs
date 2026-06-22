@@ -1,3 +1,5 @@
+pub mod region;
+
 use std::net::SocketAddr;
 
 use axum::{extract::ConnectInfo, http::StatusCode, Json};
@@ -24,9 +26,7 @@ pub async fn ping() -> Json<models::PingResponse> {
 }
 
 /// 查看客户端远端 IP 地址
-pub async fn client_ip(
-    ConnectInfo(addr): ConnectInfo<SocketAddr>,
-) -> Json<models::IpResponse> {
+pub async fn client_ip(ConnectInfo(addr): ConnectInfo<SocketAddr>) -> Json<models::IpResponse> {
     Json(models::IpResponse {
         ip: addr.ip().to_string(),
         port: addr.port(),
