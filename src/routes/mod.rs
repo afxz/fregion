@@ -11,7 +11,6 @@ use crate::handlers::{self, region::AppState};
 
 /// 创建并配置应用路由
 pub fn create_router(state: AppState) -> Router {
-    // 全局中间件
     let cors = CorsLayer::new()
         .allow_origin(Any)
         .allow_methods(Any)
@@ -24,7 +23,6 @@ pub fn create_router(state: AppState) -> Router {
         .layer(cors)
         .layer(CatchPanicLayer::new());
 
-    // API 路由
     Router::new()
         .route("/health", get(handlers::health_check))
         .nest("/api/v1", api_routes())
@@ -37,23 +35,25 @@ fn api_routes() -> Router<AppState> {
     Router::new()
         .route("/ping", get(handlers::ping))
         .route("/ip", get(handlers::client_ip))
-        .nest("/regions", region_routes())
-}
-
-/// 区域相关路由
-fn region_routes() -> Router<AppState> {
-    Router::new()
+        // 国家
         .route("/countries", get(handlers::region::list_countries))
         .route(
-            "/countries/{country_id}/provinces",
+            "/countries/{code}/provinces",
             get(handlers::region::list_provinces),
         )
+        // 省份
         .route(
-            "/provinces/{province_id}/cities",
+            "/provinces/{code}/cities",
             get(handlers::region::list_cities),
         )
+        // 城市
         .route(
-            "/cities/{city_id}/districts",
+            "/cities/{code}/districts",
             get(handlers::region::list_districts),
+        )
+        // 区县
+        .route(
+            "/districts/{code}/streets",
+            get(handlers::region::list_streets),
         )
 }

@@ -21,52 +21,72 @@ impl AppState {
     }
 }
 
-/// 获取国家列表
+// ── 国家 ──
+
 pub async fn list_countries(State(state): State<AppState>) -> Json<Vec<region::Country>> {
     Json(state.region_data.countries.clone())
 }
 
-/// 根据国家ID获取省份列表
+// ── 省份 ──
+
 pub async fn list_provinces(
     State(state): State<AppState>,
-    Path(country_id): Path<String>,
+    Path(country_code): Path<String>,
 ) -> Json<Vec<region::Province>> {
-    let provinces: Vec<_> = state
+    let result: Vec<_> = state
         .region_data
         .provinces
         .iter()
-        .filter(|p| p.country_id == country_id)
+        .filter(|p| p.country_code == country_code)
         .cloned()
         .collect();
-    Json(provinces)
+    Json(result)
 }
 
-/// 根据省份ID获取城市列表
+// ── 城市 ──
+
 pub async fn list_cities(
     State(state): State<AppState>,
-    Path(province_id): Path<String>,
+    Path(province_code): Path<String>,
 ) -> Json<Vec<region::City>> {
-    let cities: Vec<_> = state
+    let result: Vec<_> = state
         .region_data
         .cities
         .iter()
-        .filter(|c| c.province_id == province_id)
+        .filter(|c| c.province_code == province_code)
         .cloned()
         .collect();
-    Json(cities)
+    Json(result)
 }
 
-/// 根据城市ID获取区县列表
+// ── 区县 ──
+
 pub async fn list_districts(
     State(state): State<AppState>,
-    Path(city_id): Path<String>,
+    Path(city_code): Path<String>,
 ) -> Json<Vec<region::District>> {
-    let districts: Vec<_> = state
+    let result: Vec<_> = state
         .region_data
         .districts
         .iter()
-        .filter(|d| d.city_id == city_id)
+        .filter(|d| d.city_code == city_code)
         .cloned()
         .collect();
-    Json(districts)
+    Json(result)
+}
+
+// ── 街道 ──
+
+pub async fn list_streets(
+    State(state): State<AppState>,
+    Path(district_code): Path<String>,
+) -> Json<Vec<region::Street>> {
+    let result: Vec<_> = state
+        .region_data
+        .streets
+        .iter()
+        .filter(|s| s.district_code == district_code)
+        .cloned()
+        .collect();
+    Json(result)
 }
