@@ -64,15 +64,28 @@ fn daemonize() {
 
 #[cfg(windows)]
 fn daemonize() {
-    // Windows 下通过释放控制台来模拟守护进程行为
-    unsafe { windows_detach_console() };
-    tracing::info!("已释放控制台，进入后台运行模式");
-}
+    use std::os::windows::process::CommandExt;
+    use std::process::Command;
 
-#[cfg(windows)]
-unsafe fn windows_detach_console() {
-    extern "system" {
-        fn FreeConsole() -> i32;
-    }
-    FreeConsole();
+    let exe = std::env::current_exe().expect("无法获取当前可执行文件路径");
+
+    // 传递给子进程的参数，去掉 --daemon / -d
+    let args: Vec<String> = std::env::args()
+        .skip(1)
+        .filter(|a| a != "--daemon" && a != "-d")
+        .collect();
+
+    let stdout = std::fs::File::create("fregion.out.log").expect("无法创建 stdout 日志文件");
+    let stderr = std::fs::File::create("fregion.err.log").expect("无法创建 stderr 日志文件");
+
+    let child = Command::new(exe)
+        .args(&args)
+        .stdout(stdout)
+        .stderr(stderr)
+        .creation_flags(0x08000000 | 0x00000008) // CREATE_NO_WINDOW | DETACHED_PROCESS
+        .spawn()
+        .expect("无法启动守护进程");
+
+    tracing::info!("守护进程已启动 (PID: {})", child.id());
+    std::process::exit(0);
 }
