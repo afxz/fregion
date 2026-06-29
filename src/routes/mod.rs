@@ -24,6 +24,8 @@ pub fn create_router(state: AppState) -> Router {
         .layer(CatchPanicLayer::new());
 
     Router::new()
+        .route("/ping", get(handlers::ping))
+        .route("/ip", get(handlers::client_ip))
         .route("/health", get(handlers::health_check))
         .nest("/api/v1", api_routes())
         .layer(middleware)
@@ -33,8 +35,6 @@ pub fn create_router(state: AppState) -> Router {
 /// `/api/v1` 子路由
 fn api_routes() -> Router<AppState> {
     Router::new()
-        .route("/ping", get(handlers::ping))
-        .route("/ip", get(handlers::client_ip))
         // 国家
         .route("/countries", get(handlers::region::list_countries))
         .route(
