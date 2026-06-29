@@ -14,6 +14,10 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 tower = "0.5"
 tower-http = { version = "0.6", features = ["cors", "trace", "compression-br", "compression-gzip", "request-id", "catch-panic"] }
 uuid = { version = "1", features = ["v4", "serde"] }
+clap = { version = "4", features = ["derive"] }
+
+[target.'cfg(unix)'.dependencies]
+daemonize = "0.5"
 
 [profile.release]
 lto = true

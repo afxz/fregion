@@ -14,9 +14,9 @@ pub struct AppState {
 }
 
 impl AppState {
-    pub fn new() -> Self {
+    pub fn new(data_dir: &str) -> Self {
         Self {
-            region_data: Arc::new(RegionData::load()),
+            region_data: Arc::new(RegionData::load(data_dir)),
         }
     }
 }

@@ -50,14 +50,14 @@ pub struct RegionData {
 }
 
 impl RegionData {
-    /// 从 data/ 目录加载 JSON 文件
-    pub fn load() -> Self {
+    /// 从指定目录加载 JSON 文件
+    pub fn load(data_dir: &str) -> Self {
         Self {
-            countries: load("data/countries.json"),
-            provinces: load("data/provinces.json"),
-            cities: load("data/cities.json"),
-            districts: load("data/districts.json"),
-            streets: load("data/streets.json"),
+            countries: load(&format!("{}/countries.json", data_dir)),
+            provinces: load(&format!("{}/provinces.json", data_dir)),
+            cities: load(&format!("{}/cities.json", data_dir)),
+            districts: load(&format!("{}/districts.json", data_dir)),
+            streets: load(&format!("{}/streets.json", data_dir)),
         }
     }
 }
